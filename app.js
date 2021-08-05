@@ -1,12 +1,14 @@
 const axios = require("axios").default
 const fs = require("fs")
+require("dotenv").config()
+
 const path = require("path")
 const util = require("util")
 const URL = "https://leetcode.com/api/submissions"
 const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 
-const cookieVal = ""  // secret
+const cookieVal = process.env.COOKIE_SECRET || "nothing" ;
 
 const readFileDir = util.promisify(fs.readdir)
 const codeWrite = util.promisify(fs.writeFile)
@@ -111,21 +113,22 @@ const filePresenceHdl = (r_sol ) =>{
 
 const fileWriteHdl = async (r_sol) =>{
 	let s = ""
+	let p = r_sol.code.split("\n")
 
-	s += `<p>Solution Id is - ${r_sol.id} \
-		ProblemTitle - ${r_sol.title_slug} \
-	 	RunTime - ${r_sol.runtime} \
-		memory - ${r_sol.memory} \
-		langauge - ${r_sol.lang}
-		</p>
-		\
-		\
-		\
-		<p>
-		code -
-		</p>
-		${r_sol.code}
-	`
-	console.log(s)
+	p.forEach(val =>{
+		let nw = "\t \t" + val ;
+		return val  = nw ;
+	})
 
+	console.log(p , "whas")
+
+	p.forEach(val => console.log(val))
+	//s = `#### Solution Id is - ${r_sol.id} \n #### ProblemTitle - ${r_sol.title_slug} \n #### RunTime - ${r_sol.runtime}\n #### memory - ${r_sol.memory} \n #### langauge - ${r_sol.lang} \n \n #### code - \n \t \t \t  ${r_sol.code}`
+	//console.log(s)
+	////await codeWrite(`${r_sol.id}_${r_sol.title_slug}.md`, s) ;
 }
+
+
+process.on('exit', ()=>{
+	console.log("sdf")
+})
