@@ -17,22 +17,19 @@ const readFileDir = util.promisify(fs.readdir)
 const codeWrite = util.promisify(fs.writeFile)
 let aldyPresentSol = {}
 
-;(async (  )=>{
-	try {
+function mapFileWithId(){
+	return new Promise( async (resolve , reject ) => {
 		const subPresent = await readFileDir(__dirname) ;
 		subPresent.map(val => {
 			if(val.indexOf("_") >= 0)
 			{
-				let f = val.split("0")[0]
+				let f = val.split("_")[0]
 				aldyPresentSol[f] = 1
 			}
 		})
-	}
-	catch(Er)
-	{
-		return new Error("some err ", Er)
-	}
-})()
+		return resolve();
+	})
+}
 
 function SolutionDetails ({id, lang , runtime, memory, code, title_slug})
 {
@@ -45,7 +42,7 @@ function SolutionDetails ({id, lang , runtime, memory, code, title_slug})
 	this.fmtData = ""
 }
 
-SolutionDetails.prototype.IsPresent = ()=>{
+SolutionDetails.prototype.IsPresent = function(){
 	if(aldyPresentSol[this.id] === 1 )
 	{
 		return true;
@@ -67,18 +64,15 @@ SolutionDetails.prototype.fmtHdl = function(){
 }
 
 SolutionDetails.prototype._fileWriteHdl = async function() {
-	let vs_sol = this.id ;
-	//if(!fs.existsSync(`./${this.id}_${this.title_slug}`))
-	//{
-		try {
-			await codeWrite(`${this.id}_${this.title_slug}.md`,this.fmtData)
-			aldyPresentSol[this.id] = 1 ;
-		}
-		catch(er)
-		{
-			throw er;
-		}
-	//}
+	try {
+		await codeWrite(`${this.id}_${this.title_slug}.md`,this.fmtData)
+		aldyPresentSol[this.id] = 1 ;
+	}
+	catch(er)
+	{
+		console.log(er)
+		throw er;
+	}
 }
 // two func
 // 1 should fetch every information ProblemURL
@@ -91,56 +85,47 @@ SolutionDetails.prototype._fileWriteHdl = async function() {
 
 // file name = <id>_<title_slug>
 
-
-//;(async function(){
-	//try {
-		//const r_resp = await axios({
-			//method: 'GET',
-			//baseURL : PROBLEM_URL ,
-			//headers : { 'cookie' : cookieVal }
-		//})
-
-		//const l_problemObj = (r_resp.data)
-
-		//l_problemObj.stat_status_pairs.map(async (bVal, index )=>{
-			//const l_submittedSol = await axios({
-				//method : 'GET',
-				//baseURL : URL + "/" + bVal.stat.question__title_slug,
-				//headers : {
-					//'cookie' : cookieVal
-				//}
-			//})
-
-
-			//console.log(l_submittedSol)
-		//})
-	//}catch(err){
-		//console.log(err) ;
-	//}
-//})();
-
 ;(async function (){
-	//const r_recentSubmittedSols = await axios({
-		//method : 'GET',
-		//baseURL : URL,
-		//headers : {
-			//cookie : cookieVal
-		//}
-	//})
-	respJSON/*r_recentSubmittedSols.data*/.submissions_dump.map(bVal => {
-		if(bVal.status_display === 'Accepted')
+	try {
+		const r_recentSubmittedSols = await axios({
+			method : 'GET',
+			baseURL : URL,
+			headers : {
+			cookie : cookieVal
+			}
+		})
+
+		await mapFileWithId();
+	console.log(aldyPresentSol)
+		const bVal = r_recentSubmittedSols.data.submissions_dump;
+		let isFilePrsnt = false ;
+		for(let i = 0 ; i  < bVal.length ; i++ )
 		{
-			const sol_obj = new SolutionDetails(bVal);
-
-			if(!sol_obj.IsPresent())
+			if(bVal[i].status_display === 'Accepted')
 			{
-				sol_obj.fmtHdl()
-
+				const sol_obj = new SolutionDetails(bVal[i]);
+				console.log(sol_obj.id)
+				if(!sol_obj.IsPresent())
+				{
+					sol_obj.fmtHdl()
+				}
+				else
+				{
+					console.log(sol_obj.title_slug, sol_obj.id)
+					isFilePrsnt = true ;
+					break ;
+				}
 			}
 		}
-	})
 
-
+		if(isFilePrsnt )
+		{
+			throw 'File repead. Time to Stop! '
+		}
+	} catch (err)
+	{
+		console.log(err)
+	}
 })()
 
 process.on('exit', ()=>{
