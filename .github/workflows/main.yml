@@ -2,14 +2,14 @@ name: Leetcode-Solution-Collectinator
 
 on:
   schedule:
-  - cron: '*/5 * * * *'
+  - cron: '5 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ../../
+        working-directory: ./work/
 
 
     steps:
@@ -25,7 +25,7 @@ jobs:
       - name: Run the downloader script
         run: |
           npm install --save
-          node src/app.js
+          node ~/work/.github/src/app.js
       - name: pushing the changes!!
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
