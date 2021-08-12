@@ -52,8 +52,8 @@ SolutionDetails.prototype.IsPresent = function(){
 }
 
 SolutionDetails.prototype.fmtHdl = function(){
-	this.fmtData += `id = ${this.id}` ;
-	this.fmtData += '\n'
+	this.fmtData += `id = ${this.id} \n` ;
+	this.fmtData += `lang = ${this.lang} \n`
 	this.fmtData += `runtime  = ${this.runtime} \n`
 	this.fmtData += `memory = ${this.memory}\n`
 	this.fmtData += `title_slug = ${this.title_slug}\n`
