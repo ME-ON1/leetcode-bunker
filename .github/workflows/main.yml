@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ${{ github.ref_head }}
+          ref: ${{ github.head_ref }}
 
       - name: setting-up the env variables
         run: |
