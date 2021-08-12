@@ -63,7 +63,7 @@ SolutionDetails.prototype.fmtHdl = function(){
 
 SolutionDetails.prototype._fileWriteHdl = async function() {
 	try {
-		await codeWrite(`${this.id}_${this.title_slug}.md`,this.fmtData)
+		await codeWrite(`../../${this.id}_${this.title_slug}.md`,this.fmtData)
 		aldyPresentSol[this.id] = 1 ;
 	}
 	catch(er)
