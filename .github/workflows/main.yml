@@ -13,7 +13,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .github/workflows/src
+        working-directory: .github/workflows/src/
     
     steps:
       - uses: actions/checkout@v2
@@ -28,8 +28,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run the downloader script
         run: |
-          npm install --save
-          node app.js
+          ls -a
         env : 
           COOKIE_SECRET: ${{secrets.COOKIE_SECRET}} 
       - name: pushing the changes!!
