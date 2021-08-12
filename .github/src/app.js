@@ -17,7 +17,7 @@ let aldyPresentSol = {}
 
 function mapFileWithId(){
 	return new Promise( async (resolve , reject ) => {
-		const subPresent = await readFileDir(__dirname) ;
+		const subPresent = await readFileDir("../../") ;
 		subPresent.map(val => {
 			if(val.indexOf("_") >= 0)
 			{
