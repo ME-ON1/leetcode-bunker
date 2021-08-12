@@ -24,7 +24,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run the downloader script
         run: |
-          ls -a
+          cd .github/src/
+          npm install --save 
+          node app.js
         env : 
           COOKIE_SECRET: ${{secrets.COOKIE_SECRET}} 
       - name: pushing the changes!!
