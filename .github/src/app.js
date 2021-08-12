@@ -5,8 +5,6 @@ const fs = require("fs")
 const path = require("path")
 const util = require("util")
 
-const respJSON = require("../leetcoderes.json")
-
 const URL = "https://leetcode.com/api/submissions"
 const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
