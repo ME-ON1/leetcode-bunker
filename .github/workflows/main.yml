@@ -24,9 +24,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-      
-      - name: Setup npm
-        run: npm install -g npm
         
       # Runs a single command using the runners shell
       - name: Run the downloader script
