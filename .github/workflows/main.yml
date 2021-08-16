@@ -28,7 +28,7 @@ jobs:
           npm install --save 
           node app.js
         env : 
-          COOKIE_SECRET: ${{secrets.COOKIE_SECRET}} 
+          COOKIEVAL: ${{secrets.COOKIE_SECRET}} 
       - name: pushing the changes!!
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
