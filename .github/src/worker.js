@@ -16,12 +16,9 @@ parentPort.on('message' , (data) => {
 })
 
 const writeSol = (data) => {
-	console.log("am i here ?")
 	const solutionDetails = data.submissions_dump
 	if (solutionDetails.length > 0 )
 	{
-		console.log("im also here")
-		console.log(solutionDetails)
 		for(let i = 0 ; i < solutionDetails.length ; i++ )
 		{
 			if(solutionDetails[i].status_display === 'Accepted')

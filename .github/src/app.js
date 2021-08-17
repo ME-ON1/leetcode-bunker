@@ -16,7 +16,8 @@ const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 const all_problems = require("./problemstat.json");
 
-const cookieVal = ""
+const cookieVal = process.env.COOKIE_SECRET
+
 const {SolutionDetails} = require("./SolutionDetails.js")
 
 const readFileDir = util.promisify(fs.readdir)
@@ -144,8 +145,8 @@ async function DailyFetch (){
 	}
 }
 
-console.time()
 ;(async ()=>{
+	console.time()
 	await mapFileWithId()
 	console.log(aldyPresentSol)
 	if(Object.keys(aldyPresentSol).length >= 1)
@@ -158,7 +159,6 @@ console.time()
 	}
 
 })()
-//DailyFetch()
 
 process.on('exit', ()=>{
 	console.timeEnd()
