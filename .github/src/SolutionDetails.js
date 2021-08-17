@@ -6,21 +6,6 @@ const util = require("util")
 const readFileDir = util.promisify(fs.readdir)
 const codeWrite = util.promisify(fs.writeFile)
 
-let aldyPresentSol = {}
-
-function mapFileWithId(){
-	return new Promise( async (resolve , reject ) => {
-		const subPresent = await readFileDir("../../") ;
-		subPresent.map(val => {
-			if(val.indexOf("_") >= 0)
-			{
-				let f = val.split("_")[0]
-				aldyPresentSol[f] = 1
-			}
-		})
-		return resolve();
-	})
-}
 
 function SolutionDetails({id, lang , runtime, memory, code, title_slug})
 {
@@ -34,16 +19,6 @@ function SolutionDetails({id, lang , runtime, memory, code, title_slug})
 	this.ext = this._getExtension(this.lang)
 }
 
-SolutionDetails.prototype.IsPresent = function(){
-	if(aldyPresentSol[this.id] === 1 )
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
 
 SolutionDetails.prototype.fmtHdl = async function(){
 	this.fmtData += `id = ${this.id} \n` ;
@@ -58,10 +33,6 @@ SolutionDetails.prototype.fmtHdl = async function(){
 SolutionDetails.prototype._fileWriteHdl = async function() {
 	try {
 		await codeWrite(`../../${this.id}_${this.title_slug}.${this.ext}`,this.fmtData)
-		if(Object.keys(aldyPresentSol).length > 1)
-		{
-			aldyPresentSol[this.id] = 1 ;
-		}
 		console.log("file written ")
 	}
 	catch(er)
@@ -117,5 +88,5 @@ SolutionDetails.prototype._getExtension = function(lang) {
 
 
 module.exports = {
-	SolutionDetails
+	SolutionDetails,
 }
