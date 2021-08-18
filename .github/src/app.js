@@ -133,6 +133,7 @@ async function DailyFetch (){
 	} catch (err)
 	{
 		console.log(err.message )
+		process.exit(err);
 	}
 }
 
@@ -150,7 +151,8 @@ async function DailyFetch (){
 	}
 })()
 
-process.on('exit', ()=>{
+process.on('exit', (err)=>{
 	console.timeEnd()
+	console.log(err.message)
 	console.log("exited peacefully!!")
 })
