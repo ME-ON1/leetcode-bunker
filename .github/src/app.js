@@ -18,6 +18,7 @@ const all_problems = require("./problemstat.json");
 
 const cookieVal = process.env.COOKIE_SECRET ;
 
+console.log(process.env.COOKIE_SECRET)
 const {SolutionDetails} = require("./SolutionDetails.js")
 
 const readFileDir = util.promisify(fs.readdir)
