@@ -47,7 +47,7 @@ SolutionDetails.prototype._getExtension = function(lang) {
 	{
 		case 'cpp' : this.ext = "cxx"
 			break;
-		case 'js' : this.ext = "js"
+		case 'javascript' : this.ext = "js"
 			break;
 		case 'python' : this.ext = "py"
 			break ;

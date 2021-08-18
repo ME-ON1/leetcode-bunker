@@ -16,7 +16,7 @@ const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 const all_problems = require("./problemstat.json");
 
-const cookieVal = process.env.COOKIE_SECRET
+const cookieVal = process.env.COOKIE_SECRET ;
 
 const {SolutionDetails} = require("./SolutionDetails.js")
 
@@ -80,7 +80,6 @@ let solutionPromise = (question) => new Promise((resolve, reject) => {
 		.then(async (res)=>{
 				console.log(res.data)
 				worker.postMessage({workerData : res.data} )
-				//clearTimeout(sleep)
 				resolve()
 		})
 		.catch(err => {
@@ -115,30 +114,22 @@ async function DailyFetch (){
 		})
 
 		const bVal = r_recentSubmittedSols.data.submissions_dump;
-		let isFilePrsnt = false ;
 		for(let i = 0 ; i  < bVal.length ; i++ )
 		{
 			if(bVal[i].status_display === 'Accepted')
 			{
 				const sol_obj = new SolutionDetails(bVal[i]);
+				console.log(aldyPresentSol)
 				if(!sol_obj.IsPresent())
 				{
+					console.log("shsh")
 					sol_obj.fmtHdl()
 					aldyPresentSol[this.id] = 1 ;
 				}
-				else
-				{
-					isFilePrsnt = true ;
-					break ;
-				}
-				console.log(sol_obj)
 			}
 		}
+		process.exit()
 
-		if(isFilePrsnt )
-		{
-			console.log("File started to repeat")
-		}
 	} catch (err)
 	{
 		console.log(err.message )
@@ -157,7 +148,6 @@ async function DailyFetch (){
 	{
 		OneTimeFetch()
 	}
-
 })()
 
 process.on('exit', ()=>{
