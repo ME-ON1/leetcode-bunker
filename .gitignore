@@ -1,1 +1,4 @@
 node_modules/
+.github/src/.env
+.github/src/copy.json
+.github/src/fetchSolution.js

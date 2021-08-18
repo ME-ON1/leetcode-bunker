@@ -18,11 +18,6 @@ const all_problems = require("./problemstat.json");
 
 const cookieVal = process.env.COOKIE_SECRET ;
 
-console.log(process.env.COOKIE_SECRET)
-if(process.env.COOKIE_SECRET === null || process.env.COOKIE_SECRET === undefined)
-{
-	throw 'its empty'
-}
 const {SolutionDetails} = require("./SolutionDetails.js")
 
 const readFileDir = util.promisify(fs.readdir)
@@ -130,10 +125,8 @@ async function DailyFetch (){
 			if(bVal[i].status_display === 'Accepted')
 			{
 				const sol_obj = new SolutionDetails(bVal[i]);
-				console.log(aldyPresentSol)
 				if(!sol_obj.IsPresent())
 				{
-					console.log("shsh")
 					sol_obj.fmtHdl()
 					aldyPresentSol[this.id] = 1 ;
 				}
