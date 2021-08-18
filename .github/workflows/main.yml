@@ -22,7 +22,7 @@ jobs:
       - name: Run the downloader script
         run: |
           cd .github/src/
-          echo ${{secrets.COOKIE_SECRET}}
+          echo ${{ secrets.COOKIE_SECRET }}
           npm install --save 
           node app.js
         env : 
