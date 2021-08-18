@@ -94,6 +94,7 @@ let solutionPromise = (question) => new Promise((resolve, reject) => {
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 async function OneTimeFetch(){
+	try {
 	for(let i = 0 ; i < all_problems.stat_status_pairs.length ; i++ )
 	{
 		const question = all_problems.stat_status_pairs[i]
@@ -101,6 +102,11 @@ async function OneTimeFetch(){
 		await sleep(INTERVAL )
 	}
 	worker.postMessage({workerData : 'EXIT'}  )
+	}
+	catch(err)
+	{
+		process.exit(err) ;
+	}
 }
 
 async function DailyFetch (){
