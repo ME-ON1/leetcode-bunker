@@ -16,12 +16,17 @@ const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 const all_problems = require("./problemstat.json");
 
-const cookieVal = "LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiMjA3Mzc3NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImFsbGF1dGguYWNjb3VudC5hdXRoX2JhY2tlbmRzLkF1dGhlbnRpY2F0aW9uQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6IjU3MGFiN2MwNDI5MDk4YjUyZjA2OTFlMWJmMzliODBjNjM0NjE2YWIiLCJpZCI6MjA3Mzc3NSwiZW1haWwiOiJzdGFydW4uMTk5OEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ik1lX09OIiwidXNlcl9zbHVnIjoiTWVfT04iLCJhdmF0YXIiOiJodHRwczovL3d3dy5ncmF2YXRhci5jb20vYXZhdGFyL2U5MTdjYWMzMWY5NzZhMDYyM2IxNDYwMTk2ZjRmMDFiLnBuZz9zPTIwMCIsInJlZnJlc2hlZF9hdCI6MTYyOTIxNzA4MywiaXAiOiI2MS4wLjMyLjcyIiwiaWRlbnRpdHkiOiIyOTI4YWM4YWMwMjNiOTdmMzljMDMzZDM1YjllZDE3NiIsIl9zZXNzaW9uX2V4cGlyeSI6MTIwOTYwMCwic2Vzc2lvbl9pZCI6MTE1Mjk5MjZ9.jltsrtWLm0fPS576ZZG0RoqvyFb8XHvKiaf_Vpu5kN8; Domain=.leetcode.com; expires=Thu, 02 Sep 2021 05:17:22 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax; Secure" ;
+const cookieVal = process.env.COOKIE_SECRET ;
+
+if(cookieVal === null || cookieVal === undefined || cookieVal.length === 0)
+{
+	throw 'Set COOKIE_SECRET in repo secrets'
+}
+
 
 const {SolutionDetails} = require("./SolutionDetails.js")
 
 const readFileDir = util.promisify(fs.readdir)
-const codeWrite = util.promisify(fs.writeFile)
 
 let aldyPresentSol = {}
 
@@ -128,8 +133,7 @@ async function DailyFetch (){
 	} catch (err)
 	{
 		console.log(err.message )
-		//process.exit(err);
-		throw err
+		process.exit(err);
 	}
 }
 
@@ -153,14 +157,14 @@ const FileWriteHdl = async bVal => {
 ;(async ()=>{
 	console.time()
 	await mapFileWithId()
-	//if(Object.keys(aldyPresentSol).length >= 1)
-	//{
+	if(Object.keys(aldyPresentSol).length >= 1)
+	{
 		DailyFetch()
-	//}
-	//else
-	//{
-		//OneTimeFetch()
-	//}
+	}
+	else
+	{
+		OneTimeFetch()
+	}
 })()
 
 process.on('exit', (err)=>{
