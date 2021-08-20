@@ -1,4 +1,3 @@
-
 const fs = require("fs")
 
 const util = require("util")
@@ -26,18 +25,18 @@ SolutionDetails.prototype.fmtHdl = async function(){
 	this.fmtData += `runtime  = ${this.runtime} \n`
 	this.fmtData += `memory = ${this.memory}\n`
 	this.fmtData += `title_slug = ${this.title_slug}\n`
-	this.fmtData += `code =\n \`\`\`${this.code}\`\`\``
+	this.fmtData += `code =\n\n ${this.code}`
 	await this._fileWriteHdl()
 }
 
 SolutionDetails.prototype._fileWriteHdl = async function() {
 	try {
 		await codeWrite(`../../${this.id}_${this.title_slug}.${this.ext}`,this.fmtData)
-		console.log("file written ")
+		console.log("file written")
 	}
 	catch(er)
 	{
-		console.log(er.message)
+		console.log(er.message ,er )
 	}
 }
 

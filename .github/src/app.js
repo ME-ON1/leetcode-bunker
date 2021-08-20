@@ -16,7 +16,7 @@ const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 const all_problems = require("./problemstat.json");
 
-const cookieVal = process.env.COOKIE_SECRET ;
+const cookieVal = "LEETCODE_SESSION=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiMjA3Mzc3NSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImFsbGF1dGguYWNjb3VudC5hdXRoX2JhY2tlbmRzLkF1dGhlbnRpY2F0aW9uQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6IjU3MGFiN2MwNDI5MDk4YjUyZjA2OTFlMWJmMzliODBjNjM0NjE2YWIiLCJpZCI6MjA3Mzc3NSwiZW1haWwiOiJzdGFydW4uMTk5OEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ik1lX09OIiwidXNlcl9zbHVnIjoiTWVfT04iLCJhdmF0YXIiOiJodHRwczovL3d3dy5ncmF2YXRhci5jb20vYXZhdGFyL2U5MTdjYWMzMWY5NzZhMDYyM2IxNDYwMTk2ZjRmMDFiLnBuZz9zPTIwMCIsInJlZnJlc2hlZF9hdCI6MTYyOTIxNzA4MywiaXAiOiI2MS4wLjMyLjcyIiwiaWRlbnRpdHkiOiIyOTI4YWM4YWMwMjNiOTdmMzljMDMzZDM1YjllZDE3NiIsIl9zZXNzaW9uX2V4cGlyeSI6MTIwOTYwMCwic2Vzc2lvbl9pZCI6MTE1Mjk5MjZ9.jltsrtWLm0fPS576ZZG0RoqvyFb8XHvKiaf_Vpu5kN8; Domain=.leetcode.com; expires=Thu, 02 Sep 2021 05:17:22 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax; Secure" ;
 
 const {SolutionDetails} = require("./SolutionDetails.js")
 
@@ -54,7 +54,7 @@ const worker = new Worker('./worker.js' )
 
 
 worker.on('message', ()=>{
-	console.log("done writnin")
+	console.log("done writing")
 })
 
 worker.on('messageerror' , (err)=>[
@@ -66,7 +66,7 @@ worker.on('error', (err)=>{
 })
 
 worker.on('exit', ()=>{
-	console.log("done compltet")
+	console.log("done this Work")
 })
 
 let solutionPromise = (question) => new Promise((resolve, reject) => {
@@ -78,7 +78,8 @@ let solutionPromise = (question) => new Promise((resolve, reject) => {
 		}
 	})
 		.then(async (res)=>{
-				console.log(res.data)
+				//console.log(res.data)
+				console.log(res, "reaching herre")
 				worker.postMessage({workerData : res.data} )
 				resolve()
 		})
@@ -110,6 +111,7 @@ async function OneTimeFetch(){
 }
 
 async function DailyFetch (){
+	console.log("is it running")
 	try {
 		const r_recentSubmittedSols = await axios({
 			method : 'GET',
@@ -120,6 +122,19 @@ async function DailyFetch (){
 		})
 
 		const bVal = r_recentSubmittedSols.data.submissions_dump;
+		await FileWriteHdl(bVal)
+		console.log("reachign here")
+		process.exit()
+	} catch (err)
+	{
+		console.log(err.message )
+		//process.exit(err);
+		throw err
+	}
+}
+
+const FileWriteHdl = async bVal => {
+
 		for(let i = 0 ; i  < bVal.length ; i++ )
 		{
 			if(bVal[i].status_display === 'Accepted')
@@ -127,36 +142,35 @@ async function DailyFetch (){
 				const sol_obj = new SolutionDetails(bVal[i]);
 				if(!sol_obj.IsPresent())
 				{
-					sol_obj.fmtHdl()
+					console.log("running")
+					await sol_obj.fmtHdl()
 					aldyPresentSol[this.id] = 1 ;
 				}
 			}
 		}
-		process.exit()
-
-	} catch (err)
-	{
-		console.log(err.message )
-		process.exit(err);
-	}
 }
 
 ;(async ()=>{
 	console.time()
 	await mapFileWithId()
-	console.log(aldyPresentSol)
-	if(Object.keys(aldyPresentSol).length >= 1)
-	{
+	//if(Object.keys(aldyPresentSol).length >= 1)
+	//{
 		DailyFetch()
-	}
-	else
-	{
-		OneTimeFetch()
-	}
+	//}
+	//else
+	//{
+		//OneTimeFetch()
+	//}
 })()
 
 process.on('exit', (err)=>{
 	console.timeEnd()
-	console.log(err.message)
-	console.log("exited peacefully!!")
+	if(err)
+	{
+		console.log("err", err.message)
+	}
+	else
+	{
+		console.log("exited peacefully!!")
+	}
 })
