@@ -26,7 +26,7 @@ jobs:
       - name: Using LC-Collectinator
         uses : ME-ON1/Leetcode-SyncInAction@1.1.1
         with :
-          cookieVal : ${{ secrets.cookieVal }} # secrets.cookieVal coming from repository secret    
+          cookieVal : ${{ secrets.COOKIE_SECRET }} # secrets.cookieVal coming from repository secret    
           solution_location : ./  # if any , default is root '.'
       
     # dependency, to write newly created files to the root directory of the repository.  
